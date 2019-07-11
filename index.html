@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+				  <head>
+									    <meta charset="UTF-8">
+											    <meta name="viewport" content="width=750, target-densitydpi=device-dpi, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+													    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+															    <meta name="format-detection" content="telephone=no, email=no" />
+																	    <title>welcome to my little car</title>
+																			    <style type="text/css">
+    .wrapper {
+						    width:600px;
+												    height: 600px;
+																		    margin: 140px auto;
+																								    margin-bottom: 20px;
+																														    position: relative;
+																																				    top: 0;
+																																										    bottom: 0;
+																																																    right: 0;
+																																																						    left: 0;
+																																																												    }
+		    .wrapper .btn {
+								    display: inline-block;
+														    float: left;
+																				    width: 200px;
+																										    height: 200px;
+																																    background: red;
+																																						    color: #fff;
+																																												    line-height: 200px;
+																																																		    text-align: center;
+																																																								    font-size: 30px;
+																																																														    border-radius: 10px;
+																																																																				    }
+				    .wrapper .btn:nth-child(2n+1) {
+										    background:transparent;
+																    }
+						    .rest {
+												    display: flex;
+																		    }
+								    .rest .btn {
+														    flex: 1;
+																				    background: gray;
+																										    width:200px;
+																																    height: 100px;
+																																						    font-size: 30px;
+																																												    line-height: 100px;
+																																																		    text-align: center;
+																																																								    color: #fff;
+																																																														    border-radius: 10px;
+																																																																				    }
+										    .rest .btn:nth-child(2) {
+																    margin:0 20px;
+																						    }
+												    .rest #speed-up {
+																		    background: green;
+																								    }
+														    .rest #speed-down {
+																				    background: orange;
+																										    }
+																    #stop {
+																						      background: gray;
+																													      border-radius: 100%;
+																																				      color:#fff;
+																																											    }
+																		    .camera {
+																								      width:100%;
+																															      height: 300px;
+																																						    }
+																				    .camera iframe {
+																										      width:100%;
+																																	      height: 400px;
+																																								      background: #eee;
+																																															    }
+																						    </style>
+																								    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+																										  </head>
+																											  <body>
+																																    <div class="camera">
+																																						      <iframe id="iframe1" src="" frameborder="0"></iframe>
+																																									    </div>
+																																											    <div class="wrapper">
+																																																	      <div class="btn"></div>
+																																																				      <div class="btn " id="forward">向前</div>
+																																																							      <div class="btn"></div>
+																																																										      <div class="btn " id="left">向左</div>
+																																																													      <div class="btn" id="stop">制动</div>
+																																																																      <div class="btn " id="right">向右</div>
+																																																																			      <div class="btn"></div>
+																																																																						      <div class="btn " id="backward">向后</div>
+																																																																									      <div class="btn"></div>
+																																																																												    </div>
+																																																																														    <div class="rest">
+																																																																																				      <div class="btn " id="speed-up">加速</div>
+																																																																																							      <div class="btn " id="speed-down">减速</div>
+																																																																																										    </div>
+
+
+
+																																																																																												    <script type="text/javascript">
+      var socket = io();
+			      var url = '';
+
+						      function handler(status) {
+													        socket.emit('option',status);
+																	        console.log(status,'状态');
+																					      }
+
+      function recieveIP() {
+							        console.log('recvieved sendIP events data!!!');
+											        let screen = document.getElementById('iframe1');
+															        socket.on('sendIP',function(data) {
+																							          console.log(data,'ip...');
+																												          if (data) {
+																																					            url = `http://${data}:8080/stream_simple.html`;
+																																											            screen.src = url;
+																																																	          }
+																																	        })
+																			      }
+
+      window.addEventListener('load',function() {
+							        recieveIP();
+
+											        var forward = document.getElementById("forward");
+															        var backward = document.getElementById("backward");
+
+																			        var left = document.getElementById("left");
+																							        var right = document.getElementById("right");
+
+																											        var stop = document.getElementById("stop");
+
+																															        var speedUp = document.getElementById("speed-up");
+																																			        var speedDown = document.getElementById("speed-down");
+
+
+
+																																							        forward.addEventListener("click", function() {
+																																															          handler(2);
+																																																				        });
+
+																																											        backward.addEventListener("click",function() {
+																																																			          handler(8)
+																																																												        } );
+
+																																															        left.addEventListener("click", function(){
+																																																							          handler(4);
+																																																												        });
+
+																																																			        right.addEventListener("click", function() {
+																																																											          handler(6);
+																																																																        });
+
+																																																							        stop.addEventListener("click",function() {
+																																																															          handler(5);
+																																																																				        });
+
+																																																											        speedUp.addEventListener("click", function() {
+																																																																			          handler(1);
+																																																																								        });
+
+																																																															        speedDown.addEventListener("click", function() {
+																																																																							          handler(3);
+																																																																												        });
+
+																																																																			      })
+    </script>
+		  </body>
+</html>
+
+
