@@ -15,6 +15,8 @@ let clockdiv = 8;
 let speed = 512;
 let max = 2012;
 let min = 212;
+let high = 1012;
+let low = 512;
 
 http.listen(8081);
 
@@ -108,14 +110,15 @@ io.sockets.on('connection', function(socket) {
 				socket.emit('sendIP', getIPAddress());
 })
 
-function leftMotor(arr) {
-				r.pwmSetData(pwm_pin, speed);
+function leftMotor(arr,offset) {
+
+				r.pwmSetData(pwm_pin, offset ? offset : speed);
 				r.write(5, r[arr[1]]);
 				r.write(7, r[arr[2]]);
 }
 
-function rightMotor(arr) {
-				r.pwmSetData(pwm_pin1, speed);
+function rightMotor(arr,offset) {
+				r.pwmSetData(pwm_pin1, offset ? offset : speed);
 				r.write(38, r[arr[1]]);
 				r.write(40, r[arr[2]]);
 }
@@ -134,15 +137,15 @@ function backward() {
 }
 
 function right() {
-				leftMotor(d_backward);
-				rightMotor(d_forward);
+				leftMotor(d_backward,low);
+				rightMotor(d_forward,high);
 				console.log('right');
 
 }
 
 function left() {
-				leftMotor(d_forward);
-				rightMotor(d_backward);
+				leftMotor(d_forward,high);
+				rightMotor(d_backward,low);
 				console.log('left');
 
 }
